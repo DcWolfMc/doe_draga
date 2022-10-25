@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Logo from "../../assets/Logo.svg";
-import { MapPin, ShoppingCart } from "phosphor-react";
-import { Badge, CartButton, HeaderContainer, LocationField } from "./styles";
+import { ShoppingCart, PlusCircle } from "phosphor-react";
+import { HeaderContainer, BlueButton , YellowButton } from "./styles";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 
@@ -14,21 +14,19 @@ export const Header = () => {
         <img src={Logo} />
       </Link>
       <nav>
-        <LocationField>
-          <MapPin weight="fill" size={24} />
-          <span>Fortaleza, CE</span>
-        </LocationField>
-        <Link to="/cart">
-          <CartButton>
-            <ShoppingCart weight="fill" size={24} />
-          
-          {cart.length > 0 && (
-            <Badge>
-              {cart.reduce((acc,product)=> {return acc+product.amount},0)}
-            </Badge>
-          )}
-          </CartButton>
+        <Link to="/adList">
+        <YellowButton>Lista de anúncios</YellowButton>
         </Link>
+        <Link to="/faq">
+        <YellowButton>FAQ</YellowButton>
+        </Link>
+        <Link to="/newAd">
+          <BlueButton>CRIAR ANÚNCIO
+            <PlusCircle  size={24}/>
+          </BlueButton>
+        </Link>
+        <Link to="/adList"></Link>
+        
       </nav>
     </HeaderContainer>
   );

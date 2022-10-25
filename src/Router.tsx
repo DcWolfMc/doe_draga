@@ -11,6 +11,7 @@ export const Router = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="/adList" element={<Cart />} />
+          <Route path="/faq" element={<Cart />} />
           <Route path="/newAd" element={<Cart />} />
           <Route path="/ad/:id" element={<Cart />} />
           

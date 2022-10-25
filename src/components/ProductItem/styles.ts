@@ -30,7 +30,7 @@ img{
 }
 strong{
     margin: 0.5rem;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Inter', sans-serif;
     font-size: 1.25rem;
 }
 p{

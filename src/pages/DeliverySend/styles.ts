@@ -12,7 +12,7 @@ gap: 2.5rem;
     strong{
         color: ${props => props.theme["yellow-700"]};;
         font-size: 2rem;
-        font-family: 'Baloo 2', cursive;
+        font-family: 'Inter', sans-serif;
     }
     >p{
         font-size: 1.25rem;

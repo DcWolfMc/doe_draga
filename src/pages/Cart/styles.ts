@@ -31,7 +31,7 @@ gap: 2rem;
     gap:1rem;
 }
     h2{
-        font-family: 'Baloo 2', cursive;
+        font-family: 'Inter', sans-serif;
         line-height: 1.3;
         font-size: 1.125rem;
     }
