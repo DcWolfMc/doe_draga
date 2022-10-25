@@ -20,8 +20,7 @@ body,
 input,
 textarea,
 button {
-  font-family: 'Baloo 2', cursive;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: 1rem;
 }

@@ -10,8 +10,16 @@ export const Router = () => {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
+          <Route path="/adList" element={<Cart />} />
+          <Route path="/newAd" element={<Cart />} />
+          <Route path="/ad/:id" element={<Cart />} />
+          
           <Route path="/cart" element={<Cart />} />
           <Route path="/deliverySend" element={<DeliverySend />} />
+        </Route>
+        <Route path="/admin" element={<MainLayout/>}>
+          <Route index element={<Home/>}/>
+          <Route path="/admin/list" element={<Cart />} />
         </Route>
       </Routes>
     </BrowserRouter>
