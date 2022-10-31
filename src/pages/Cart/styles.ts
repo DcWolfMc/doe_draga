@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 export const CartContainer = styled.main`
 padding: 10rem 10rem;
 flex: 1;

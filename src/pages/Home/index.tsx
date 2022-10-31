@@ -24,7 +24,7 @@ export const Home = () => {
             </p>
           </CoverTitle>
           <Info>
-            <Link to={"/cart"}>
+            <Link to={"/adList"}>
               <LinkButton>Buscar Por Anúncios</LinkButton>
             </Link>
           </Info>

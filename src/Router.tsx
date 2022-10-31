@@ -1,8 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Cart } from "./pages/Cart";
-import { DeliverySend } from "./pages/DeliverySend";
 import { Home } from "./pages/Home";
 import { MainLayout } from "./layouts/MainLayout";
+import { AdList } from "./pages/AdList";
+import { NewAnnounce } from "./pages/NewAnnounce";
+import { AdDetails } from "./pages/AdDetails";
 
 export const Router = () => {
   return (
@@ -10,16 +12,14 @@ export const Router = () => {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="/adList" element={<Cart />} />
+          <Route path="/adList" element={<AdList />} />
           <Route path="/faq" element={<Cart />} />
-          <Route path="/newAd" element={<Cart />} />
-          <Route path="/ad/:id" element={<Cart />} />
-          
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/deliverySend" element={<DeliverySend />} />
+          <Route path="/newAd" element={<NewAnnounce />} />
+          <Route path="/ad/:id" element={<AdDetails />} />
         </Route>
-        <Route path="/admin" element={<MainLayout/>}>
-          <Route index element={<Home/>}/>
+
+        <Route path="/admin" element={<MainLayout />}>
+          <Route index element={<Home />} />
           <Route path="/admin/list" element={<Cart />} />
         </Route>
       </Routes>

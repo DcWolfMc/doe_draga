@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 export const HomeContainer = styled.main`
+display: flex;
+flex:1;
 padding-top: 6rem;
 display: flex;
 flex-direction: column;
@@ -18,7 +20,7 @@ display: flex;
 flex-direction: row;
 align-items: center;
 justify-content: center;
-gap:10rem;
+gap:5rem;
 background-image: url("/src/assets/bg-blur.png");
 background-size: cover;
 background-repeat: no-repeat;

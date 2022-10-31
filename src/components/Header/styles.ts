@@ -18,7 +18,7 @@ nav{
     display: flex;
     flex-direction: row;
     justify-content: center;
-
+    align-items: center;
     gap: 1.5rem;
 
     
@@ -27,7 +27,9 @@ nav{
 
     
 `
- const LinkButton = styled.button`
+const LinkButton = styled.button`
+min-width:7.5rem;
+min-height:3.75rem;
 position: relative;
 display: flex;
 flex-direction: row;
@@ -36,7 +38,7 @@ align-content: center;
 justify-content: center;
 gap: 0.5rem;
 padding: 1rem;
-border: 1px solid transparent;
+border: 2px solid transparent;
 border-radius: 8px;
 text-transform: uppercase;
 a{
@@ -58,7 +60,7 @@ background: ${props => props.theme["blue-500"]};
     background: ${props => props.theme["gray-100"]};
     color: ${props => props.theme["blue-500"]};
     border-color:${props => props.theme["blue-500"]};
-    border-width: 2px;
+    
 }
 `
 export const YellowButton = styled(LinkButton)`

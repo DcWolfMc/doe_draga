@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
   box-sizing: border-box;
 }
 body {
-  background: ${props => props.theme["gray-100"]};
+  background: ${props => props.theme["gray-200"]};
   color: ${props => props.theme["gray-700"]};
   -webkit-font-smoothing: antialiased;
 }
