@@ -14,10 +14,10 @@ module.exports = app => {
     .get(postsControlador.busca_id);
 
   app
-    .route('/post/:id')
+    .route('/post_delete/:id')
     .delete(postsControlador.deleta);
 
   app
-    .route('/post-update/:id')
+    .route('/post_update/:id')
     .put(postsControlador.update);
 };

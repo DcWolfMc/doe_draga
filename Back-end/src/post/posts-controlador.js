@@ -49,9 +49,9 @@ module.exports = {
   },
 
   update: async (req, res) => {
-    const posts = await Post.buscaPorId_provedor(req.params.id_projeto);
+    const posts = await Post.buscaPorId_provedor(req.params.id);
     try {
-      await posts.update(req.params.id_projeto, { $set: req.body });
+      await posts.update(req.params.id, { $set: req.body });
       res.status(200).send();
     } catch (erro) {
       res.status(500).json({ erro: erro });
