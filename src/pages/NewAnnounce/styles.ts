@@ -95,10 +95,11 @@ justify-content: flex-start;
 align-items: flex-start;
 `
 export const AdFormContentFields = styled.div`
-display:flex;
+display: flex;
 flex-direction: column;
 justify-content: flex-start;
 align-items: flex-start;
+gap:1.5rem;
 `
 export const AdImageWrapper = styled.div`
 display:flex;
@@ -210,6 +211,13 @@ const BaseInput = styled.input`
     line-height: 1.3;
     color:${props => props.theme["gray-800"]};
     background: ${props => props.theme["gray-300"]};
+    :hover{
+        cursor: pointer;
+    }
+    :disabled{
+        opacity:50%;
+        cursor: not-allowed
+    }
 `
 export const InputTypeNumber = styled(BaseInput)`
     -webkit-appearance: textfield;

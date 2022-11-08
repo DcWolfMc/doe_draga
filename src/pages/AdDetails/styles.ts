@@ -167,15 +167,21 @@ export const ModalRowDivider = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     gap: 5rem;
+span{
+   font-size:2rem;
+   max-width: 20rem;
+   color:${props => props.theme['blue-500']}
+}
 `
 export const QRcodeWrapper = styled.div`
+min-height: 100%;
+height: 25rem;
 display: flex;
 flex-direction: column;
-justify-content: center;
+justify-content: space-between;
 align-items: center;
-gap:1rem;
 span{
 
     font-size: 1.5rem;
@@ -187,23 +193,8 @@ span{
 export const QRcodeImage = styled.img`
     width:20rem;
     padding: 0.5rem;
-    border: 2px solid ${props => props.theme['gray-900']};
-`
-export const DonationInformationColunm = styled.div`
-padding:1rem;
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
-align-items: flex-start;
-gap: 1rem;
-
-div{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap:1rem;
-}
+    border-radius: 8px;
+    border: 2px solid ${props => props.theme['yellow-500']};
 `
 
 

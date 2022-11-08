@@ -1,6 +1,6 @@
 import { Box, Modal, CircularProgress } from "@mui/material";
 import { QrCodePix } from "qrcode-pix";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Container,
   ContentText,
@@ -17,8 +17,6 @@ import {
   QRcodeWrapper,
   ModalRowDivider,
   QRcodeImage,
-  DonationInformationColunm,
-  InputTypeText,
 } from "./styles";
 
 interface IParameter {
@@ -26,10 +24,7 @@ interface IParameter {
   key: string;
   city: string;
   name: string;
-  value?: number;
   transactionId?: string;
-  message?: string;
-  cep?: string;
   currency?: number; //default: 986 ('R$')
   countryCode?: string; //default: 'BR'
 }
@@ -56,15 +51,16 @@ export const AdDetails = () => {
 
   useEffect(() => {
     async function callOne() {
+
       const qrCodePix: IResponse = QrCodePix({
         version: "01",
-        key: "guttemberg95@gmail.com", //or any PIX key
-        name: "Guttemberg",
+        key: "00726768685", //or any PIX key
+        name: "Clarisa",
         city: "CEARA",
         transactionId: "152371637", //max 25 characters
-        message: "Pay me :)",
-        value: donationValue,
       });
+      console.log("new data: ", qrCodePix);
+      
       return await qrCodePix.base64().then((res: string) => setQRcode(res));
     }
     callOne();
@@ -154,7 +150,7 @@ export const AdDetails = () => {
       </ContentContainer>
       <Modal open={open} onClose={handleClose}>
         <ModalContainer>
-          <h1>Painel de Doação</h1>
+          <TitleText>Painel de Doação</TitleText>
           <ModalRowDivider>
             <QRcodeWrapper>
               {QRcode == "" ? (
@@ -164,13 +160,6 @@ export const AdDetails = () => {
               )}
               <span>Leia o QRcode em sua Zona Pix de preferencia.</span>
             </QRcodeWrapper>
-          <DonationInformationColunm>
-            <div>
-            <span>Valor a doar: </span>
-            <strong>{donationValue}</strong>
-            </div>
-            <InputTypeText type={"text"} placeholder="R$ - Determine um novo valor" />
-          </DonationInformationColunm>
           </ModalRowDivider>
         </ModalContainer>
       </Modal>
