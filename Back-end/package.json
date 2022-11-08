@@ -1,0 +1,35 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "> JWT (JSON Web Token) é um método RCT 7519 padrão da indústria para realizar autenticação entre duas partes por meio de um token assinado que autentica uma requisição web. Esse token é um código em Base64 que armazena objetos JSON com os dados que permitem a autenticação da requisição.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "config": "^3.3.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "googleapis": "^100.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "localStorage": "^1.0.4",
+    "moment": "^2.29.1",
+    "mongoose": "^6.2.8",
+    "mongoose-morgan": "^1.0.17",
+    "morgan": "^1.10.0",
+    "node-localstorage": "^2.2.1",
+    "nodemailer": "^6.7.5",
+    "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-http-bearer": "^1.0.1",
+    "passport-local": "^1.0.0",
+    "util": "^0.12.4"
+  }
+}
