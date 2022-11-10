@@ -146,6 +146,7 @@ background: ${props => props.theme["yellow-500"]};
 
 `
 export const LinkButton = styled.button`
+min-width: 12rem;
 flex:1;
 position: relative;
 display: flex;

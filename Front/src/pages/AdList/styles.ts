@@ -14,6 +14,7 @@ export const ListContainer = styled.div`
 flex: 1;
 display: flex;
 flex-direction: column;
+align-items: center;
 gap: 2rem;
 
 `

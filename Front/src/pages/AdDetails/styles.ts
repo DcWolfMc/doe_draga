@@ -8,7 +8,7 @@ width: 100%;
 padding: 10% 3rem 1rem;
 display: flex;
 flex-direction: row;
-align-items: flex-start;
+align-items: stretch;
 justify-content: flex-start;
 gap:1rem;
 `
@@ -98,6 +98,7 @@ span{
 
 export const ContentContainer = styled.section`
 flex: 1;
+
 padding: 4rem 4rem;
 display: flex;
 flex-direction: column;
@@ -132,6 +133,7 @@ export const TitleText = styled.h1`
     line-height: 1.3;
     font-weight: bold;
     color: ${props => props.theme["blue-500"]};
+    text-transform: capitalize;
 
 `
 export const ContentText = styled.p`

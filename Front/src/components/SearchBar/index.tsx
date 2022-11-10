@@ -11,7 +11,7 @@ import { FunctionComponent } from "react";
 interface Props {
   filterText: string;
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
-  onSubmit(): void
+  onSubmit: React.FormEventHandler<HTMLFormElement>
 }
 export const SearchBar: FunctionComponent<Props> = ({
   filterText,

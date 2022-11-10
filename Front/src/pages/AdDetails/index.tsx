@@ -1,6 +1,8 @@
 import { Box, Modal, CircularProgress } from "@mui/material";
 import { QrCodePix } from "qrcode-pix";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getAdById } from "../../services/api";
 import {
   Container,
   ContentText,
@@ -18,6 +20,10 @@ import {
   ModalRowDivider,
   QRcodeImage,
 } from "./styles";
+import Imageplaceholder from "../../assets/image_placeholder.png";
+import { Announce } from "../../@types/Announce";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface IParameter {
   version: string;
@@ -35,36 +41,74 @@ interface IResponse {
 }
 
 export const AdDetails = () => {
-  const [image, setImage] = useState<string>(
-    "https://i.pinimg.com/564x/a8/7b/c4/a87bc4d12a957a4ed8d0b58e6957b054.jpg"
-  );
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string[]>([]);
+  const { id } = useParams<string>();
+  const [data, setData] = useState<Announce>({
+    id: "",
+    email: "",
+    nome_criador: "",
+    telefone: "",
+    duracao: 0,
+    titulo: "",
+    pixKey: "",
+    texto: "",
+    imagem: "",
+    status: "ativo",
+  });
 
   //MODAL STATES
-
   const [open, setOpen] = useState(false);
-  const [donationValue, setDonationValue] = useState<number>(0);
   const [QRcode, setQRcode] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const createdDate = format(
+    data.data_liberacao ? data.data_liberacao : new Date(),
+    "dd 'de' MMMM  'de' yyyy",
+    {
+      locale: ptBR,
+    }
+  );
+  const expireDate = format(
+    data.data_termino ? data.data_termino : new Date(),
+    "dd 'de' MMMM  'de' yyyy",
+    {
+      locale: ptBR,
+    }
+  );
   useEffect(() => {
     async function callOne() {
+      await getAdById(id!)
+        .then((res) => {
+          console.log("res.data", res.data[0]);
+          setData(res.data[0]);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
 
+    callOne();
+  }, [id]);
+const textFormated = data.texto.split("\n")
+console.log("textFormated",textFormated);
+
+  useEffect(() => {
+    async function generateQRcode() {
       const qrCodePix: IResponse = QrCodePix({
         version: "01",
-        key: "00726768685", //or any PIX key
-        name: "Clarisa",
+        key: data.pixKey, //or any PIX key
+        name: data.nome_criador,
         city: "CEARA",
         transactionId: "152371637", //max 25 characters
       });
       console.log("new data: ", qrCodePix);
-      
+
       return await qrCodePix.base64().then((res: string) => setQRcode(res));
     }
-    callOne();
-  }, [donationValue]);
+
+    if (data.pixKey != "") {
+      generateQRcode();
+    }
+  }, [data]);
 
   const style = {};
 
@@ -72,9 +116,13 @@ export const AdDetails = () => {
     <Container>
       <InfoWrapper>
         <ImageContainer>
-          {image && (
+          {data.imagem && data.imagem != "" ? (
             <ImageWrapper>
-              <div style={{ backgroundImage: `url(${image})` }} />
+              <div style={{ backgroundImage: `url(${data.imagem})` }} />
+            </ImageWrapper>
+          ) : (
+            <ImageWrapper>
+              <img src={Imageplaceholder} />
             </ImageWrapper>
           )}
         </ImageContainer>
@@ -82,31 +130,25 @@ export const AdDetails = () => {
         <InfoDetails>
           <InfoItem>
             <span>Inicio do Aúncio:</span>
-            <span>20 de Setembro de 2020</span>
+            <span>{createdDate}</span>
           </InfoItem>
           <InfoItem>
             <span>Encerramento do anúncio:</span>
-            <span>20 de Abril de 2021</span>
+            <span>{expireDate}</span>
           </InfoItem>
         </InfoDetails>
       </InfoWrapper>
       <ContentContainer>
         <ContentWrapper>
-          <TitleText>
-            Titulo Ti tulo Titulotitulo Titulotitulo Titulotitulotitulo{" "}
-          </TitleText>
+          <TitleText>{data.titulo}</TitleText>
           <div>
-            <ContentText>
-              Turpis egestas pretium aenean pharetra. Parturient montes nascetur
-              ridiculus mus mauris. Semper viverra nam libero justo laoreet sit
-              amet cursus sit. Quis varius quam quisque id diam. Eget mauris
-              pharetra et ultrices neque ornare. Pulvinar sapien et ligula
-              ullamcorper malesuada. Consectetur adipiscing elit duis tristique
-              sollicitudin. Cras pulvinar mattis nunc sed blandit libero. Eu
-              consequat ac felis donec et odio pellentesque. Tellus id interdum
-              velit laoreet id donec ultrices.
-            </ContentText>
-            <ContentText>
+            {
+              textFormated.map((p)=>{
+                return<ContentText>{p}</ContentText>
+              })
+            }
+            
+            {/* <ContentText>
               Turpis egestas pretium aenean pharetra. Parturient montes nascetur
               ridiculus mus mauris. Semper viverra nam libero justo laoreet sit
               amet cursus sit. Quis varius quam quisque id diam. Eget mauris
@@ -144,7 +186,7 @@ export const AdDetails = () => {
               mauris. Semper viverra nam libero justo laoreet sit amet cursus
               sit. Quis varius quam quisque id diam. Eget mauris pharetra et
               ultrices neque ornare
-            </ContentText>
+            </ContentText> */}
           </div>
         </ContentWrapper>
       </ContentContainer>

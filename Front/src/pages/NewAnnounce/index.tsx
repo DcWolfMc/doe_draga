@@ -10,7 +10,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { addDays } from "date-fns";
+import { addDays , format} from "date-fns";
 import { useNavigate } from "react-router-dom"
 import { v4 as uuidv4 } from "uuid";
 import { Announce } from "../../@types/Announce";
@@ -34,7 +34,10 @@ import {
   TextArea,
 } from "./styles";
 
-import { createAnnounce } from "../../services/api";
+import { createAnnounce, getAdList } from "../../services/api";
+import { CircularProgress } from "@mui/material";
+import { ThemeConsumer } from "styled-components";
+import { defaultTheme } from "../../styles/themes/default";
 
 export const NewAnnounce: FunctionComponent = () => {
   const navigation = useNavigate()
@@ -49,8 +52,9 @@ export const NewAnnounce: FunctionComponent = () => {
   const [endDate, setEndDate] = useState<string>("");
   const [pixKey, setPixKey] = useState<string>("");
   const [image, setImage] = useState<[]>([]);
-  const [duration, setDuration] = useState<number>();
-
+  const [duration, setDuration] = useState<string>("");
+  
+  const [loading, setLoading] = useState<boolean>(false)
   let teste:Announce = {
     id: "0",
     email: email,
@@ -62,7 +66,7 @@ export const NewAnnounce: FunctionComponent = () => {
     pixKey: pixKey,
     data_liberacao: new Date(initialDate),
     data_termino: new Date(endDate),
-    duracao: duration,
+    duracao: Number(duration),
   }
 
   console.log(teste);
@@ -70,6 +74,7 @@ export const NewAnnounce: FunctionComponent = () => {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    setLoading(true)
     let announce: Announce = {
       id: uuidv4(),
       email: email,
@@ -82,16 +87,21 @@ export const NewAnnounce: FunctionComponent = () => {
     };
     isEndSpecific
       ? (announce = { ...announce, data_termino: new Date(endDate) })
-      : (announce = { ...announce, duracao: duration });
+      : (announce = { ...announce, duracao: Number(duration) });
     StartSpecificDate
       ? (announce = { ...announce, data_liberacao: new Date(initialDate) })
       : (announce = announce);
       console.log("announce:",announce);
-      
+      getAdList().then((res)=>{
+        console.log("getAdList",res);
+        
+      })
       createAnnounce(announce).then(res=>{
         console.log(res);
         navigation("/adList")
         
+      }).catch((res)=>{
+        setLoading(false)
       })
   }
 
@@ -151,6 +161,7 @@ export const NewAnnounce: FunctionComponent = () => {
                 <InputTypeTextFlex
                   disabled={!StartSpecificDate}
                   type={"date"}
+                  min={format(addDays(new Date(), 7),"yyyy-MM-dd")}
                   value={initialDate}
                   onChange={(event)=>setInitialDate(event.target.value)}
                 />
@@ -172,13 +183,14 @@ export const NewAnnounce: FunctionComponent = () => {
                     />
                   </CheckBoxWrapper>
                   {isEndSpecific ? (
-                    <InputTypeTextFlex type={"date"} value={endDate} onChange={(event)=>setEndDate(event.target.value)}/>
+                    <InputTypeTextFlex required type={"date"} min={format(addDays(new Date(), 8),"yyyy-MM-dd")} value={endDate} onChange={(event)=>setEndDate(event.target.value)}/>
                   ) : (
                     <InputTypeTextFlex
                       type={"number"}
                       placeholder="tempo de duração do anúncio (DIAS)"
                       value={duration}
-                      onChange={(event)=>setDuration(Number(event.target.value))}
+                      required
+                      onChange={(event)=>setDuration(event.target.value)}
                     />
                   )}
                 </div>
@@ -200,6 +212,7 @@ export const NewAnnounce: FunctionComponent = () => {
                 <InputTypeTextFlex
                   type="text"
                   placeholder="Titulo do Anúncio"
+                  required
                   value={adTitle}
                   onChange={event=>setAdTitle(event.target.value)}
                 />
@@ -207,6 +220,7 @@ export const NewAnnounce: FunctionComponent = () => {
                 <TextArea
                   placeholder={"Conte sua história"}
                   rows={10}
+                  required
                   onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                     setAdContent(e.target.value)
                   }
@@ -223,11 +237,12 @@ export const NewAnnounce: FunctionComponent = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setPixKey(e.target.value);
               }}
+              required
               type="text"
               placeholder="Chave PIX do que receberá o dinheiro"
             />
           </div>
-          <LinkButton type="submit">Finalizar Cadastro</LinkButton>
+          <LinkButton type="submit">{loading?<CircularProgress size={24} color={"inherit"} />:"Finalizar Cadastro"}</LinkButton>
         </DonationFormWrapper>
       </FormContainer>
     </Container>

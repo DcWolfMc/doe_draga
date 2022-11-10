@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+width: 100%;
 display: flex;
 flex-direction: row;
 align-items: stretch;
@@ -9,7 +10,6 @@ border-radius: 8px;
 
 `;
 export const ImageWrapper = styled.div`
-width: 100%;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -23,6 +23,7 @@ background-color: ${props => props.theme["blue-700"]};
 div {
     flex:1;
     width: 100%;
+    max-width: 28rem;
     height: 28rem;
     display: flex;
     border-radius: 8px 0px 0px 8px;
@@ -34,6 +35,7 @@ div {
 `;
 export const ContentWrapper = styled.div`
 height: auto;
+width: 100%;
 padding: 1.5rem 1.5rem ;
 display: flex;
 flex-direction: column;
@@ -61,6 +63,7 @@ font-style: normal;
 font-weight: 700;
 font-size: 2rem;
 line-height: 2.5rem;
+text-transform: capitalize;
 
 color: ${props => props.theme['blue-500']};
 `;
