@@ -204,7 +204,7 @@ export const AdminEditAnnounce: FunctionComponent = () => {
             <AdFormContentFields>
               <AdImageWrapper>
                 <div>
-                  <label>
+                  <label style={{color:defaultTheme["gray-100"]}}>
                     Deseja adicionar alguma imagem para o seu anúncio ?
                   </label>
                   <InputFile type="file" name="" id="" />

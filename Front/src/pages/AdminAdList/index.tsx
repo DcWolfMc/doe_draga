@@ -1,8 +1,9 @@
+import React from "react";
 import { format, addDays, differenceInDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import { Announce } from "../../@types/Announce";
-import { getAdList, UpdatePostById,deletePostById } from "../../services/api";
+import { getAdList, UpdatePostById, deletePostById } from "../../services/api";
 import {
   ActionIconButtonBlue,
   ActionIconButtonGreen,
@@ -17,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 export const AdminAdList = () => {
   const [adList, setList] = useState<Announce[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigation = useNavigate();
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export const AdminAdList = () => {
       await getAdList()
         .then((response) => {
           setList(response.data);
+          console.log("getList", response.data);
         })
         .catch((error) => {
           console.log("error", error);
@@ -31,27 +34,46 @@ export const AdminAdList = () => {
     }
     async function validateUser() {}
     validateUser();
-
-    apiCall();
+    if (!loading) {
+      apiCall();
+    }
   }, []);
 
   async function handleReleaseAd(adId: string, ad: Announce) {
-    await UpdatePostById(adId, {
-      ...ad,
+    setLoading(true)
+    console.log("ad._id", ad._id);
+
+    let objeto: Announce = {
+      data_criacao:ad.data_criacao,
+      duracao:ad.duracao?ad.duracao:0,
+      email:ad.email,
+      id:ad.id,
+      imagem:ad.imagem?ad.imagem:"",
+      pixKey:ad.pixKey,
+      telefone:ad.telefone,
+      nome_criador:ad.nome_criador,
+      texto:ad.texto,
+      titulo:ad.titulo,
       status: "ativo",
       data_liberacao: new Date(),
       data_termino: ad.data_termino
         ? ad.data_termino
         : addDays(new Date(), ad.duracao ? ad.duracao : 0),
-    }).then((response)=>{
-      console.log("ReleaseAd:", response);
-      
-    }).catch((error)=>{
-      console.log("ReleaseAd error:",error);
-      
-    });;
+    };
+    console.log("Teste", objeto);
+
+    await UpdatePostById(adId, objeto)
+      .then((response) => {
+        console.log("ReleaseAd:", response);
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log("ReleaseAd error:", error);
+        setLoading(false)
+      });
   }
   async function handleTerminateAd(adId: string, ad: Announce) {
+    setLoading(true)
     await UpdatePostById(adId, {
       ...ad,
       status: "encerrado",
@@ -59,24 +81,29 @@ export const AdminAdList = () => {
       duracao: differenceInDays(
         ad.data_termino ? ad.data_termino : new Date(),
         ad.data_liberacao ? ad.data_liberacao : new Date()
-        ),
-      }).then((response)=>{
+      ),
+    })
+      .then((response) => {
         console.log("TerminateAd:", response);
-        
-      }).catch((error)=>{
-        console.log("TerminateAd error:",error);
-        
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log("TerminateAd error:", error);
+        setLoading(false)
       });
-    }
-    async function handleDeleteAd(adId: string) {
-      await deletePostById(adId).then((response)=>{
+  }
+  async function handleDeleteAd(adId: string) {
+    setLoading(true)
+    await deletePostById(adId)
+      .then((response) => {
         console.log("DeleteAd:", response);
-        
-      }).catch((error)=>{
-        console.log("DeleteAd error:",error);
-        
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log("DeleteAd error:", error);
+        setLoading(false)
       });
-    }
+  }
   return (
     <HistoryContainer>
       <h1> Lista de Anúncio </h1>
@@ -138,10 +165,11 @@ export const AdminAdList = () => {
                       <Article size={24} />
                     </ActionIconButtonBlue>
 
-                    <ActionIconButtonRed style={{ marginRight: "1rem" }}
-                    onClick={() => {
-                      handleDeleteAd(ad.id);
-                    }}
+                    <ActionIconButtonRed
+                      style={{ marginRight: "1rem" }}
+                      onClick={() => {
+                        handleDeleteAd(ad.id);
+                      }}
                     >
                       <Trash size={24} />
                     </ActionIconButtonRed>
@@ -150,7 +178,7 @@ export const AdminAdList = () => {
                       <ActionIconButtonRed
                         style={{ marginRight: "1rem" }}
                         onClick={() => {
-                          handleTerminateAd(ad.id, ad);
+                          handleTerminateAd(ad._id!, ad);
                         }}
                       >
                         <Prohibit size={24} />
@@ -161,7 +189,7 @@ export const AdminAdList = () => {
                       <ActionIconButtonGreen
                         style={{ marginRight: "1rem" }}
                         onClick={() => {
-                          handleReleaseAd(ad.id, ad);
+                          handleReleaseAd(ad._id!, ad);
                         }}
                       >
                         <Check size={24} weight={"bold"} />

@@ -250,5 +250,9 @@ border-radius: 8px;
 line-height: 1.3;
 color:${props => props.theme["gray-800"]};
 background: ${props => props.theme["gray-300"]};
+:disabled{
+        opacity:50%;
+        cursor: not-allowed
+    }
 
 `

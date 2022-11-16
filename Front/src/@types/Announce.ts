@@ -1,4 +1,5 @@
 export interface Announce {
+    _id?:string
     id: string
     email: string
     nome_criador: string

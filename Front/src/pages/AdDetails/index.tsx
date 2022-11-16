@@ -24,6 +24,7 @@ import Imageplaceholder from "../../assets/image_placeholder.png";
 import { Announce } from "../../@types/Announce";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import React from "react";
 
 interface IParameter {
   version: string;
@@ -149,45 +150,6 @@ console.log("textFormated",textFormated);
               })
             }
             
-            {/* <ContentText>
-              Turpis egestas pretium aenean pharetra. Parturient montes nascetur
-              ridiculus mus mauris. Semper viverra nam libero justo laoreet sit
-              amet cursus sit. Quis varius quam quisque id diam. Eget mauris
-              pharetra et ultrices neque ornare. Pulvinar sapien et ligula
-              ullamcorper malesuada. Consectetur adipiscing elit duis tristique
-              sollicitudin. Cras pulvinar mattis nunc sed blandit libero. Eu
-              consequat ac felis donec et odio pellentesque. Tellus id interdum
-              velit laoreet id donec ultrices. Turpis egestas pretium aenean
-              pharetra. Parturient montes nascetur ridiculus mus mauris. Semper
-              viverra nam libero justo laoreet sit amet cursus sit. Quis varius
-              quam quisque id diam. Eget mauris pharetra et ultrices neque
-              ornare
-            </ContentText>
-            <ContentText>
-              Turpis egestas pretium aenean pharetra. Parturient montes nascetur
-              ridiculus mus mauris. Semper viverra nam libero justo laoreet sit
-              amet cursus sit. Quis varius quam quisque id diam. Eget mauris
-              pharetra et ultrices neque ornare. Pulvinar sapien et ligula
-              ullamcorper malesuada. Consectetur adipiscing elit duis tristique
-              sollicitudin. Cras pulvinar mattis nunc sed blandit libero. Eu
-              consequat ac felis donec et odio pellentesque. Tellus id interdum
-              velit laoreet id donec ultrices. Turpis egestas pretium aenean
-              pharetra. Parturient montes nascetur ridiculus mus mauris. Semper
-              viverra nam libero justo laoreet sit amet cursus sit. Quis varius
-              quam quisque id diam. Eget mauris pharetra et ultrices neque
-              ornareTurpis egestas pretium aenean pharetra. Parturient montes
-              nascetur ridiculus mus mauris. Semper viverra nam libero justo
-              laoreet sit amet cursus sit. Quis varius quam quisque id diam.
-              Eget mauris pharetra et ultrices neque ornare. Pulvinar sapien et
-              ligula ullamcorper malesuada. Consectetur adipiscing elit duis
-              tristique sollicitudin. Cras pulvinar mattis nunc sed blandit
-              libero. Eu consequat ac felis donec et odio pellentesque. Tellus
-              id interdum velit laoreet id donec ultrices. Turpis egestas
-              pretium aenean pharetra. Parturient montes nascetur ridiculus mus
-              mauris. Semper viverra nam libero justo laoreet sit amet cursus
-              sit. Quis varius quam quisque id diam. Eget mauris pharetra et
-              ultrices neque ornare
-            </ContentText> */}
           </div>
         </ContentWrapper>
       </ContentContainer>
