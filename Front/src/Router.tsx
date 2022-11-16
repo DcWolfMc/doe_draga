@@ -8,6 +8,7 @@ import { AdDetails } from "./pages/AdDetails";
 import { AdminLayout } from "./layouts/AdminLayout";
 import { AdminAuth } from "./pages/AdminAuth";
 import { AdminAdList } from "./pages/AdminAdList";
+import { AdminEditAnnounce } from "./pages/AdminEditAnnounce";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -23,6 +24,8 @@ export const Router = () => {
         <Route path="/adAdmin" element={<AdminLayout />}>
           <Route index element={<AdminAuth />} />
           <Route path="/adAdmin/list" element={<AdminAdList />} />
+          <Route path="/adAdmin/:id" element={<AdDetails />} />
+          <Route path="/adAdmin/Edit/:id" element={<AdminEditAnnounce />}/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -9,5 +9,4 @@ align-items: center;
 justify-content: flex-start;
 gap:1rem;
 
-background-color: ${props=>props.theme["blue-700"]};
 `

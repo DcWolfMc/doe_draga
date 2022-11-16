@@ -1,3 +1,4 @@
+import { Announcement } from "@mui/icons-material";
 import axios from "axios";
 import { Announce } from "../@types/Announce";
 
@@ -22,8 +23,8 @@ export const getAdById = async(id:string)=>{
 export const deletePostById = async(id:string)=>{
     return api.delete(`post_delete/${id}`)
 }
-export const UpdatePostById = async(id:string)=>{
-    return api.put(`post_update/${id}`)
+export const UpdatePostById = async(id:string,post:Announce)=>{
+    return api.put(`post_update/${id}`,post)
 }
 
 

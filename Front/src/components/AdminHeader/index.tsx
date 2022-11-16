@@ -3,10 +3,8 @@ import Logo from "../../assets/Logo.svg";
 import { ShoppingCart, PlusCircle } from "phosphor-react";
 import { HeaderContainer, BlueButton , YellowButton } from "./styles";
 import { useContext, useEffect, useState } from "react";
-import { CartContext } from "../../context/CartContext";
 
 export const AdminHeader = () => {
-  const { cart } = useContext(CartContext);
 
   return (
     <HeaderContainer>

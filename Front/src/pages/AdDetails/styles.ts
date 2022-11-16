@@ -5,7 +5,7 @@ export const Container = styled.main`
 flex: 1;
 height: 100%;
 width: 100%;
-padding: 10% 3rem 1rem;
+padding: 0 3rem 1rem;
 display: flex;
 flex-direction: row;
 align-items: stretch;

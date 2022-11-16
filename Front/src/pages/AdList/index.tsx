@@ -1,10 +1,10 @@
-import { format } from "date-fns";
+import { addDays, differenceInDays, format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FormEvent, useEffect, useState } from "react";
 import { Announce } from "../../@types/Announce";
 import { AdItem } from "../../components/AdItem";
 import { SearchBar } from "../../components/SearchBar";
-import { getAdList } from "../../services/api";
+import { getAdList,UpdatePostById } from "../../services/api";
 import { Container, ListContainer } from "./styles";
 import { CircularProgress } from "@mui/material";
 export const AdList = () => {
@@ -13,16 +13,37 @@ export const AdList = () => {
   const [adList, setAdlist] = useState<Announce[]>([])
   const [filterList, setFilterList] = useState<Announce[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  
   useEffect(()=>{
     setLoading(true);
     async function apiCall(){
     await getAdList().then((response)=>{
       console.log("response",response.data);
-      
-      let filtredList = response.data.filter((ad:Announce)=>{
-        return ad.status == "ativo"
+      let dataResponse:Announce[] = []
+      let dataAtual = new Date()
+      response.data.forEach((ad:Announce)=>{
+        if( ad.data_termino && ad.status=="analise"){
+          let daysToPass = differenceInDays(ad.data_termino,dataAtual)
+          if(daysToPass <= 0){
+            UpdatePostById(ad.id,{...ad,status:"encerrado"});
+          }else{
+            dataResponse.push(ad);
+          }
+      }else if(ad.data_liberacao && ad.status=="analise"){
+        let daysToLaunch = differenceInDays(dataAtual,ad.data_liberacao)
+        if(daysToLaunch <=0){
+          let dataTermino = addDays(dataAtual,ad.duracao? ad.duracao:0)
+          UpdatePostById(ad.id,{...ad,status:"ativo",data_termino:ad.data_termino?ad.data_termino:dataTermino});
+          dataResponse.push(ad);
+        }
+      }
       })
+      let filtredList = dataResponse.filter((ad:Announce)=>{
+        return ad.status == "ativo"
+      });
+      
       console.log("filtredList",filtredList);
+      
       setAdlist(filtredList)
       setFilterList(filtredList)
       

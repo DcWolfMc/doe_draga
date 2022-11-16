@@ -2,17 +2,12 @@ import React, {
   FunctionComponent,
   useState,
   ChangeEvent,
-  ChangeEventHandler,
   FormEvent,
+  useEffect,
 } from "react";
 import { CustomCheckbox } from "../../components/CustomCheckbox/CustomCheckbox";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { addDays , format} from "date-fns";
-import { useNavigate } from "react-router-dom"
-import { v4 as uuidv4 } from "uuid";
+import { useNavigate, useParams } from "react-router-dom"
 import { Announce } from "../../@types/Announce";
 import {
   Container,
@@ -34,11 +29,12 @@ import {
   TextArea,
 } from "./styles";
 
-import { createAnnounce, getAdList } from "../../services/api";
+import { getAdById, UpdatePostById } from "../../services/api";
 import { CircularProgress } from "@mui/material";
 import { defaultTheme } from "../../styles/themes/default";
 
-export const NewAnnounce: FunctionComponent = () => {
+export const AdminEditAnnounce: FunctionComponent = () => {
+  const { id } = useParams<string>();
   const navigation = useNavigate()
   const [nomeCriador, setNomeCriador] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -50,32 +46,40 @@ export const NewAnnounce: FunctionComponent = () => {
   const [isEndSpecific, setIsEndSpecific] = useState<boolean>(false);
   const [endDate, setEndDate] = useState<string>("");
   const [pixKey, setPixKey] = useState<string>("");
-  const [image, setImage] = useState<[]>([]);
+  const [image, setImage] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
   
   const [loading, setLoading] = useState<boolean>(false)
-  let teste:Announce = {
-    id: "0",
-    email: email,
-    nome_criador: nomeCriador,
-    telefone: telefone,
-    titulo: adTitle,
-    texto: adContent,
-    status: "analise",
-    pixKey: pixKey,
-    data_liberacao: new Date(initialDate),
-    data_termino: new Date(endDate),
-    duracao: Number(duration),
-  }
-
-  console.log(teste);
   
+  useEffect(() => {
+    async function callOne() {
+      await getAdById(id!)
+        .then((res) => {
+          let data:Announce = res.data[0]
+          console.log("data", data);
+          setNomeCriador(data.nome_criador)
+          setEmail(data.email)
+          setTelefone(data.telefone)
+          setAdTitle(data.titulo)
+          setAdContent(data.texto)
+          setInitialDate(data.data_liberacao?format(data.data_liberacao,"yyyy-MM-dd"):"");
+          setEndDate(data.data_termino?format(data.data_termino,"yyyy-MM-dd"):"");
+          setPixKey(data.pixKey)
+          data.imagem && setImage(data.imagem)
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
+
+    callOne();
+  }, [id]);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setLoading(true)
     let announce: Announce = {
-      id: uuidv4(),
+      id: id!,
       email: email,
       nome_criador: nomeCriador,
       telefone: telefone,
@@ -91,9 +95,9 @@ export const NewAnnounce: FunctionComponent = () => {
       ? (announce = { ...announce, data_liberacao: new Date(initialDate) })
       : (announce = announce);
       console.log("announce:",announce);
-      createAnnounce(announce).then(res=>{
+      UpdatePostById(id!,announce).then(res=>{
         console.log(res);
-        navigation("/adList")
+        navigation("/adAdmin/list")
         
       }).catch((res)=>{
         setLoading(false)
@@ -145,11 +149,13 @@ export const NewAnnounce: FunctionComponent = () => {
                   <CustomCheckbox
                     checked={StartSpecificDate}
                     onChange={() => setStartSpecificDate(true)}
+                    disabled
                     label="Sim"
                   />
                   <CustomCheckbox
                     checked={!StartSpecificDate}
                     onChange={() => setStartSpecificDate(false)}
+                    disabled
                     label="Não"
                   />
                 </CheckBoxWrapper>
@@ -178,9 +184,10 @@ export const NewAnnounce: FunctionComponent = () => {
                     />
                   </CheckBoxWrapper>
                   {isEndSpecific ? (
-                    <InputTypeTextFlex required type={"date"} min={format(addDays(new Date(), 8),"yyyy-MM-dd")} value={endDate} onChange={(event)=>setEndDate(event.target.value)}/>
+                    <InputTypeTextFlex disabled required type={"date"} min={format(addDays(new Date(), 8),"yyyy-MM-dd")} value={endDate} onChange={(event)=>setEndDate(event.target.value)}/>
                   ) : (
                     <InputTypeTextFlex
+                      disabled
                       type={"number"}
                       placeholder="tempo de duração do anúncio (DIAS)"
                       value={duration}
@@ -207,7 +214,7 @@ export const NewAnnounce: FunctionComponent = () => {
                 <InputTypeTextFlex
                   type="text"
                   placeholder="Titulo do Anúncio"
-                  required
+                  disabled
                   value={adTitle}
                   onChange={event=>setAdTitle(event.target.value)}
                 />
@@ -216,6 +223,7 @@ export const NewAnnounce: FunctionComponent = () => {
                   placeholder={"Conte sua história"}
                   rows={10}
                   required
+                  disabled
                   onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                     setAdContent(e.target.value)
                   }

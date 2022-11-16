@@ -1,6 +1,6 @@
-import { Box, Modal, CircularProgress } from "@mui/material";
+import { Modal, CircularProgress } from "@mui/material";
 import { QrCodePix } from "qrcode-pix";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAdById } from "../../services/api";
 import {
@@ -88,6 +88,7 @@ export const AdDetails = () => {
 
     callOne();
   }, [id]);
+  
 const textFormated = data.texto.split("\n")
 console.log("textFormated",textFormated);
 
