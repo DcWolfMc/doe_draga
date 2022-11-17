@@ -23,7 +23,7 @@ export const HistoryList = styled.div`
         flex:1;
         width: 100%;
         border-collapse: collapse;
-        min-width: 60rem;
+        min-width: 65rem;
 
         th{
             background-color: ${props => props.theme["gray-600"]};
@@ -53,12 +53,11 @@ export const HistoryList = styled.div`
             
             
             &:first-child{
-               width: 40%;
+               width: 30%;
                padding-left: 1.5rem;
             }
             &:last-child{
                 min-width: 8rem;
-                padding-right: 1.5rem;
             }
         }
 

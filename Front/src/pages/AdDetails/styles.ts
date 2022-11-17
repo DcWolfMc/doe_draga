@@ -19,6 +19,8 @@ flex-direction: column;
 align-items: flex-start;
 justify-content: flex-start;
 gap:2rem;
+background-color: ${props => props.theme["gray-100"]};
+border-radius: 8px 0px 0px 8px;
 `
 
 export const ImageContainer = styled.div`
@@ -55,7 +57,6 @@ div {
 }
 `;
 export const Button = styled.button`
-flex:1;
 width: 100%;
 position: relative;
 display: flex;

@@ -1,3 +1,4 @@
+import React from "react"
 import { addDays, differenceInDays, format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FormEvent, useEffect, useState } from "react";
@@ -23,16 +24,16 @@ export const AdList = () => {
       let dataAtual = new Date()
       response.data.forEach((ad:Announce)=>{
         if( ad.data_termino && ad.status=="analise"){
-          let daysToPass = differenceInDays(ad.data_termino,dataAtual)
+          let daysToPass = differenceInDays(parseISO(ad.data_termino),dataAtual)
           if(daysToPass <= 0){
             UpdatePostById(ad.id,{...ad,status:"encerrado"});
           }else{
             dataResponse.push(ad);
           }
       }else if(ad.data_liberacao && ad.status=="analise"){
-        let daysToLaunch = differenceInDays(dataAtual,ad.data_liberacao)
+        let daysToLaunch = differenceInDays(dataAtual,parseISO(ad.data_liberacao))
         if(daysToLaunch <=0){
-          let dataTermino = addDays(dataAtual,ad.duracao? ad.duracao:0)
+          let dataTermino = addDays(dataAtual,ad.duracao? ad.duracao:0).toISOString()
           UpdatePostById(ad.id,{...ad,status:"ativo",data_termino:ad.data_termino?ad.data_termino:dataTermino});
           dataResponse.push(ad);
         }
@@ -85,10 +86,10 @@ export const AdList = () => {
         {loading&&(<CircularProgress />)}
         {filterList.map((ad)=>{
 
-          let createdDate = format(ad.data_liberacao?ad.data_liberacao :new Date(),"dd 'de' MMMM  'de' yyyy",{
+          let createdDate = format(ad.data_liberacao?parseISO(ad.data_liberacao) :new Date(),"dd 'de' MMMM  'de' yyyy",{
             locale: ptBR
           })
-          let expireDate = format(ad.data_termino?ad.data_termino :new Date(),"dd 'de' MMMM  'de' yyyy",{
+          let expireDate = format(ad.data_termino?parseISO(ad.data_termino) :new Date(),"dd 'de' MMMM  'de' yyyy",{
             locale: ptBR
           })
           return(

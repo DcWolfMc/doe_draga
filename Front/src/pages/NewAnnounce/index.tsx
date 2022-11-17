@@ -63,8 +63,8 @@ export const NewAnnounce: FunctionComponent = () => {
     texto: adContent,
     status: "analise",
     pixKey: pixKey,
-    data_liberacao: new Date(initialDate),
-    data_termino: new Date(endDate),
+    data_liberacao: new Date(initialDate).toISOString(),
+    data_termino: new Date(endDate).toISOString(),
     duracao: Number(duration),
   }
 
@@ -85,15 +85,15 @@ export const NewAnnounce: FunctionComponent = () => {
       pixKey: pixKey,
     };
     isEndSpecific
-      ? (announce = { ...announce, data_termino: new Date(endDate) })
+      ? (announce = { ...announce, data_termino: new Date(endDate).toISOString() })
       : (announce = { ...announce, duracao: Number(duration) });
     StartSpecificDate
-      ? (announce = { ...announce, data_liberacao: new Date(initialDate) })
+      ? (announce = { ...announce, data_liberacao: new Date(initialDate).toISOString() })
       : (announce = announce);
       console.log("announce:",announce);
       createAnnounce(announce).then(res=>{
         console.log(res);
-        navigation("/adList")
+        //navigation("/adList")
         
       }).catch((res)=>{
         setLoading(false)

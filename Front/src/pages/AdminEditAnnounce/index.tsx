@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { CustomCheckbox } from "../../components/CustomCheckbox/CustomCheckbox";
-import { addDays , format} from "date-fns";
+import { addDays , format,parseISO} from "date-fns";
 import { useNavigate, useParams } from "react-router-dom"
 import { Announce } from "../../@types/Announce";
 import {
@@ -62,8 +62,8 @@ export const AdminEditAnnounce: FunctionComponent = () => {
           setTelefone(data.telefone)
           setAdTitle(data.titulo)
           setAdContent(data.texto)
-          setInitialDate(data.data_liberacao?format(data.data_liberacao,"yyyy-MM-dd"):"");
-          setEndDate(data.data_termino?format(data.data_termino,"yyyy-MM-dd"):"");
+          setInitialDate(data.data_liberacao?format(parseISO(data.data_liberacao),"yyyy-MM-dd"):"");
+          setEndDate(data.data_termino?format(parseISO(data.data_termino),"yyyy-MM-dd"):"");
           setPixKey(data.pixKey)
           data.imagem && setImage(data.imagem)
         })
@@ -89,10 +89,10 @@ export const AdminEditAnnounce: FunctionComponent = () => {
       pixKey: pixKey,
     };
     isEndSpecific
-      ? (announce = { ...announce, data_termino: new Date(endDate) })
+      ? (announce = { ...announce, data_termino: new Date(endDate).toISOString() })
       : (announce = { ...announce, duracao: Number(duration) });
     StartSpecificDate
-      ? (announce = { ...announce, data_liberacao: new Date(initialDate) })
+      ? (announce = { ...announce, data_liberacao: new Date(initialDate).toISOString() })
       : (announce = announce);
       console.log("announce:",announce);
       UpdatePostById(id!,announce).then(res=>{

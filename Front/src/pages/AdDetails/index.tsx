@@ -22,7 +22,7 @@ import {
 } from "./styles";
 import Imageplaceholder from "../../assets/image_placeholder.png";
 import { Announce } from "../../@types/Announce";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import React from "react";
 
@@ -62,14 +62,14 @@ export const AdDetails = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const createdDate = format(
-    data.data_liberacao ? data.data_liberacao : new Date(),
+    data.data_liberacao ? parseISO(data.data_liberacao) : new Date(),
     "dd 'de' MMMM  'de' yyyy",
     {
       locale: ptBR,
     }
   );
   const expireDate = format(
-    data.data_termino ? data.data_termino : new Date(),
+    data.data_termino ? parseISO( data.data_termino) : new Date(),
     "dd 'de' MMMM  'de' yyyy",
     {
       locale: ptBR,

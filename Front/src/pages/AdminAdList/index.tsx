@@ -1,5 +1,5 @@
 import React from "react";
-import { format, addDays, differenceInDays } from "date-fns";
+import { format, addDays, differenceInDays, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import { Announce } from "../../@types/Announce";
@@ -55,10 +55,10 @@ export const AdminAdList = () => {
       texto:ad.texto,
       titulo:ad.titulo,
       status: "ativo",
-      data_liberacao: new Date(),
+      data_liberacao: new Date().toISOString(),
       data_termino: ad.data_termino
         ? ad.data_termino
-        : addDays(new Date(), ad.duracao ? ad.duracao : 0),
+        : addDays(new Date(), ad.duracao ? ad.duracao : 0).toISOString(),
     };
     console.log("Teste", objeto);
 
@@ -77,10 +77,10 @@ export const AdminAdList = () => {
     await UpdatePostById(adId, {
       ...ad,
       status: "encerrado",
-      data_termino: new Date(),
+      data_termino: new Date().toISOString(),
       duracao: differenceInDays(
-        ad.data_termino ? ad.data_termino : new Date(),
-        ad.data_liberacao ? ad.data_liberacao : new Date()
+        ad.data_termino ? parseISO(ad.data_termino) : new Date(),
+        ad.data_liberacao ? parseISO(ad.data_liberacao) : new Date()
       ),
     })
       .then((response) => {
@@ -127,14 +127,14 @@ export const AdminAdList = () => {
                   <td>{ad.duracao ? `${ad.duracao} dias` : "-"}</td>
                   <td>
                     {ad.data_liberacao
-                      ? format(ad.data_liberacao, "dd/MMMM/yyyy", {
+                      ? format(parseISO(ad.data_liberacao), "dd/MMMM/yyyy", {
                           locale: ptBR,
                         })
                       : "-"}
                   </td>
                   <td>
                     {ad.data_termino
-                      ? format(ad.data_termino, "dd/MMMM/yyyy", {
+                      ? format(parseISO(ad.data_termino), "dd/MMMM/yyyy", {
                           locale: ptBR,
                         })
                       : "-"}
