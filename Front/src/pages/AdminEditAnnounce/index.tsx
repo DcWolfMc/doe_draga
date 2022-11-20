@@ -36,6 +36,7 @@ import { defaultTheme } from "../../styles/themes/default";
 export const AdminEditAnnounce: FunctionComponent = () => {
   const { id } = useParams<string>();
   const navigation = useNavigate()
+  const [_id, set_id] = useState<string>('')
   const [nomeCriador, setNomeCriador] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [telefone, setTelefone] = useState<string>("");
@@ -57,6 +58,7 @@ export const AdminEditAnnounce: FunctionComponent = () => {
         .then((res) => {
           let data:Announce = res.data[0]
           console.log("data", data);
+          set_id(data._id!)
           setNomeCriador(data.nome_criador)
           setEmail(data.email)
           setTelefone(data.telefone)
@@ -95,7 +97,7 @@ export const AdminEditAnnounce: FunctionComponent = () => {
       ? (announce = { ...announce, data_liberacao: new Date(initialDate).toISOString() })
       : (announce = announce);
       console.log("announce:",announce);
-      UpdatePostById(id!,announce).then(res=>{
+      UpdatePostById(_id!,announce).then(res=>{
         console.log(res);
         navigation("/adAdmin/list")
         

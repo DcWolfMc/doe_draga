@@ -26,7 +26,7 @@ export const AdList = () => {
         if( ad.data_termino && ad.status=="analise"){
           let daysToPass = differenceInDays(parseISO(ad.data_termino),dataAtual)
           if(daysToPass <= 0){
-            UpdatePostById(ad.id,{...ad,status:"encerrado"});
+            UpdatePostById(ad._id!,{...ad,status:"encerrado"});
           }else{
             dataResponse.push(ad);
           }
@@ -34,7 +34,7 @@ export const AdList = () => {
         let daysToLaunch = differenceInDays(dataAtual,parseISO(ad.data_liberacao))
         if(daysToLaunch <=0){
           let dataTermino = addDays(dataAtual,ad.duracao? ad.duracao:0).toISOString()
-          UpdatePostById(ad.id,{...ad,status:"ativo",data_termino:ad.data_termino?ad.data_termino:dataTermino});
+          UpdatePostById(ad._id!,{...ad,status:"ativo",data_termino:ad.data_termino?ad.data_termino:dataTermino});
           dataResponse.push(ad);
         }
       }

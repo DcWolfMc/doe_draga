@@ -22,22 +22,23 @@ export const AdminAdList = () => {
   const navigation = useNavigate();
 
   useEffect(() => {
-    async function apiCall() {
-      await getAdList()
-        .then((response) => {
-          setList(response.data);
-          console.log("getList", response.data);
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    }
+    
     async function validateUser() {}
     validateUser();
     if (!loading) {
       apiCall();
     }
   }, []);
+  async function apiCall() {
+    await getAdList()
+      .then((response) => {
+        setList(response.data);
+        console.log("getList", response.data);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }
 
   async function handleReleaseAd(adId: string, ad: Announce) {
     setLoading(true)
@@ -66,6 +67,7 @@ export const AdminAdList = () => {
       .then((response) => {
         console.log("ReleaseAd:", response);
         setLoading(false)
+        apiCall()
       })
       .catch((error) => {
         console.log("ReleaseAd error:", error);
@@ -86,6 +88,7 @@ export const AdminAdList = () => {
       .then((response) => {
         console.log("TerminateAd:", response);
         setLoading(false)
+        apiCall()
       })
       .catch((error) => {
         console.log("TerminateAd error:", error);
@@ -98,6 +101,7 @@ export const AdminAdList = () => {
       .then((response) => {
         console.log("DeleteAd:", response);
         setLoading(false)
+        apiCall()
       })
       .catch((error) => {
         console.log("DeleteAd error:", error);
@@ -168,7 +172,7 @@ export const AdminAdList = () => {
                     <ActionIconButtonRed
                       style={{ marginRight: "1rem" }}
                       onClick={() => {
-                        handleDeleteAd(ad.id);
+                        handleDeleteAd(ad._id!);
                       }}
                     >
                       <Trash size={24} />
