@@ -56,6 +56,13 @@ div {
     background-position: center;
 }
 `;
+export const ButtonWrapper = styled.div`
+width: 100%;
+padding: 0 0.5rem;
+display: flex;
+flex-direction: row; 
+justify-content: center;
+`
 export const Button = styled.button`
 width: 100%;
 position: relative;
@@ -164,6 +171,7 @@ export const ModalContainer = styled(Box)`
 
     
 `
+
 export const ModalRowDivider = styled.div`
     width:100%;
     padding: 2rem;

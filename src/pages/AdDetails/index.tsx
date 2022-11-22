@@ -13,6 +13,7 @@ import {
   InfoWrapper,
   TitleText,
   ContentWrapper,
+  ButtonWrapper,
   Button,
   InfoItem,
   ModalContainer,
@@ -25,6 +26,7 @@ import { Announce } from "../../@types/Announce";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import React from "react";
+import { defaultTheme } from "../../styles/themes/default";
 
 interface IParameter {
   version: string;
@@ -59,6 +61,7 @@ export const AdDetails = () => {
   //MODAL STATES
   const [open, setOpen] = useState(false);
   const [QRcode, setQRcode] = useState("");
+  const [loading, setLoading] = useState<boolean>(false)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const createdDate = format(
@@ -77,13 +80,16 @@ export const AdDetails = () => {
   );
   useEffect(() => {
     async function callOne() {
+      setLoading(true)
       await getAdById(id!)
         .then((res) => {
           console.log("res.data", res.data[0]);
           setData(res.data[0]);
+          setLoading(false)
         })
         .catch((res) => {
           console.log(res);
+          setLoading(false)
         });
     }
 
@@ -118,8 +124,10 @@ console.log("textFormated",textFormated);
     <Container>
       <InfoWrapper>
         <ImageContainer>
+          
           {data.imagem && data.imagem != "" ? (
             <ImageWrapper>
+
               <div style={{ backgroundImage: `url(${data.imagem})` }} />
             </ImageWrapper>
           ) : (
@@ -128,7 +136,9 @@ console.log("textFormated",textFormated);
             </ImageWrapper>
           )}
         </ImageContainer>
+        <ButtonWrapper>
         <Button onClick={handleOpen}>DOAR</Button>
+        </ButtonWrapper>
         <InfoDetails>
           <InfoItem>
             <span>Inicio do Aúncio:</span>
@@ -142,6 +152,20 @@ console.log("textFormated",textFormated);
       </InfoWrapper>
       <ContentContainer>
         <ContentWrapper>
+        {loading && (
+          <div
+            style={{
+              flex:1,
+              padding:"0.5rem",
+              width: "100%",
+              color: defaultTheme["blue-500"],
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress color="inherit" />
+          </div>
+        )}
           <TitleText>{data.titulo}</TitleText>
           <div>
             {

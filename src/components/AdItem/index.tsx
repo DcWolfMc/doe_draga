@@ -41,7 +41,7 @@ export const AdItem: FunctionComponent<Props> = ({
       <ContentWrapper style={!image?{borderRadius:8}:{}}>
         <Header>
           <Title>{title}</Title>
-          <ContentPreview>{description}</ContentPreview>
+          <ContentPreview>{description.length>=1272?description.substring(0,1272).padEnd(1275,"."):description}</ContentPreview>
         </Header>
         <Footer style={!image?{marginTop:"1rem"}:{}}>
           <DatesInfo>

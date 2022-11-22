@@ -85,8 +85,8 @@ export const AdList = () => {
   return (
     <Container>
       <SearchBar filterText={filterText} onSubmit={handleFilter} setFilterText={setFilterText} />
-      <ListContainer>
         {loading&&(<CircularProgress />)}
+      <ListContainer>
         {filterList.map((ad)=>{
 
           let createdDate = format(ad.data_liberacao?parseISO(ad.data_liberacao) :new Date(),"dd 'de' MMMM  'de' yyyy",{
@@ -107,58 +107,6 @@ export const AdList = () => {
         />
           )
         })}
-        {/* <AdItem
-          id={data.id}
-          title={data.title}
-          description={data.description}
-          expireDate={data.expireDate}
-          createdDate={data.createdDate}
-          image="https://i.pinimg.com/564x/a8/7b/c4/a87bc4d12a957a4ed8d0b58e6957b054.jpg"
-        />
-        <AdItem
-          id={data.id}
-          title={data.title}
-          description={data.description}
-          expireDate={data.expireDate}
-          createdDate={data.createdDate}
-          image="https://i.pinimg.com/564x/2b/6d/bd/2b6dbd941642f4d3f655c67ea4c94993.jpg"
-        />
-        <AdItem
-          id={data.id}
-          title={data.title}
-          description={data.description}
-          expireDate={data.expireDate}
-          createdDate={data.createdDate}
-        />
-        <AdItem
-          id={data.id}
-          title={data.title}
-          description={data.description}
-          expireDate={data.expireDate}
-          createdDate={data.createdDate}
-        />
-        <AdItem
-          id={data.id}
-          title={data.title}
-          description={data.description}
-          expireDate={data.expireDate}
-          createdDate={data.createdDate}
-          image="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/05/ca/18/05/praia-de-iracema.jpg?w=1200&h=-1&s=1"
-        />
-        <AdItem
-          id={data.id}
-          title={data.title}
-          description={data.description}
-          expireDate={data.expireDate}
-          createdDate={data.createdDate}
-        />
-        <AdItem
-          id={data.id}
-          title={data.title}
-          description={data.description}
-          expireDate={data.expireDate}
-          createdDate={data.createdDate}
-        /> */}
       </ListContainer>
     </Container>
   );

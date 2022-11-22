@@ -15,6 +15,8 @@ import {
 } from "./styles";
 import { Check, Article, NotePencil, Trash, Prohibit } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
+import { defaultTheme } from "../../styles/themes/default";
 
 export const AdminAdList = () => {
   const [adList, setList] = useState<Announce[]>([]);
@@ -22,11 +24,11 @@ export const AdminAdList = () => {
   const navigation = useNavigate();
 
   useEffect(() => {
-    
     async function validateUser() {}
     validateUser();
     if (!loading) {
       apiCall();
+      setLoading(true);
     }
   }, []);
   async function apiCall() {
@@ -34,27 +36,29 @@ export const AdminAdList = () => {
       .then((response) => {
         setList(response.data);
         console.log("getList", response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log("error", error);
+        setLoading(false);
       });
   }
 
   async function handleReleaseAd(adId: string, ad: Announce) {
-    setLoading(true)
+    setLoading(true);
     console.log("ad._id", ad._id);
 
     let objeto: Announce = {
-      data_criacao:ad.data_criacao,
-      duracao:ad.duracao?ad.duracao:0,
-      email:ad.email,
-      id:ad.id,
-      imagem:ad.imagem?ad.imagem:"",
-      pixKey:ad.pixKey,
-      telefone:ad.telefone,
-      nome_criador:ad.nome_criador,
-      texto:ad.texto,
-      titulo:ad.titulo,
+      data_criacao: ad.data_criacao,
+      duracao: ad.duracao ? ad.duracao : 0,
+      email: ad.email,
+      id: ad.id,
+      imagem: ad.imagem ? ad.imagem : "",
+      pixKey: ad.pixKey,
+      telefone: ad.telefone,
+      nome_criador: ad.nome_criador,
+      texto: ad.texto,
+      titulo: ad.titulo,
       status: "ativo",
       data_liberacao: new Date().toISOString(),
       data_termino: ad.data_termino
@@ -66,16 +70,16 @@ export const AdminAdList = () => {
     await UpdatePostById(adId, objeto)
       .then((response) => {
         console.log("ReleaseAd:", response);
-        setLoading(false)
-        apiCall()
+        setLoading(false);
+        apiCall();
       })
       .catch((error) => {
         console.log("ReleaseAd error:", error);
-        setLoading(false)
+        setLoading(false);
       });
   }
   async function handleTerminateAd(adId: string, ad: Announce) {
-    setLoading(true)
+    setLoading(true);
     await UpdatePostById(adId, {
       ...ad,
       status: "encerrado",
@@ -87,31 +91,44 @@ export const AdminAdList = () => {
     })
       .then((response) => {
         console.log("TerminateAd:", response);
-        setLoading(false)
-        apiCall()
+        setLoading(false);
+        apiCall();
       })
       .catch((error) => {
         console.log("TerminateAd error:", error);
-        setLoading(false)
+        setLoading(false);
       });
   }
   async function handleDeleteAd(adId: string) {
-    setLoading(true)
+    setLoading(true);
     await deletePostById(adId)
       .then((response) => {
         console.log("DeleteAd:", response);
-        setLoading(false)
-        apiCall()
+        setLoading(false);
+        apiCall();
       })
       .catch((error) => {
         console.log("DeleteAd error:", error);
-        setLoading(false)
+        setLoading(false);
       });
   }
   return (
     <HistoryContainer>
       <h1> Lista de Anúncio </h1>
       <HistoryList>
+        {loading && (
+          <div
+            style={{
+              padding:"0.5rem",
+              width: "100%",
+              color: defaultTheme["gray-100"],
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress color="inherit" />
+          </div>
+        )}
         <table>
           <thead>
             <tr>
