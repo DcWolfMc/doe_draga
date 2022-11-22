@@ -50,9 +50,8 @@ export const NewAnnounce: FunctionComponent = () => {
   const [isEndSpecific, setIsEndSpecific] = useState<boolean>(false);
   const [endDate, setEndDate] = useState<string>("");
   const [pixKey, setPixKey] = useState<string>("");
-  const [image, setImage] = useState<[]>([]);
   const [duration, setDuration] = useState<string>("");
-  
+  const [base64Image, setbase64Image] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   let teste:Announce = {
     id: "0",
@@ -63,12 +62,12 @@ export const NewAnnounce: FunctionComponent = () => {
     texto: adContent,
     status: "analise",
     pixKey: pixKey,
-    data_liberacao: new Date(initialDate).toISOString(),
-    data_termino: new Date(endDate).toISOString(),
+    data_liberacao: initialDate!=''?new Date(initialDate).toISOString() :new Date().toISOString(),
+    data_termino: endDate!=''?new Date(endDate).toISOString() :new Date().toISOString(),
     duracao: Number(duration),
   }
 
-  console.log(teste);
+  //console.log(teste);
   
 
   function handleSubmit(e: FormEvent) {
@@ -83,7 +82,8 @@ export const NewAnnounce: FunctionComponent = () => {
       texto: adContent,
       status: "analise",
       pixKey: pixKey,
-    };
+    }; 
+    base64Image !=""? announce = {...announce, imagem: base64Image}: null
     isEndSpecific
       ? (announce = { ...announce, data_termino: new Date(endDate).toISOString() })
       : (announce = { ...announce, duracao: Number(duration) });
@@ -93,12 +93,51 @@ export const NewAnnounce: FunctionComponent = () => {
       console.log("announce:",announce);
       createAnnounce(announce).then(res=>{
         console.log(res);
-        //navigation("/adList")
+        navigation("/adList")
         
       }).catch((res)=>{
         setLoading(false)
       })
   }
+  function handleSelectImage(){
+
+  }
+  async function getBase64(file:File) {
+    return new Promise(resolve => {
+      
+      // Make new FileReader
+      let reader = new FileReader();
+
+      // Convert the file to base64 text
+      reader.readAsDataURL(file);
+
+      // on reader load somthing...
+      reader.onload = () => {
+        // Make a fileInfo Object
+        //console.log("Called", reader);
+        let baseURL = reader.result;
+        //console.log("baseURL:",baseURL);
+        resolve(baseURL);
+      };
+    });
+  };
+
+  function handleFileInputChange(e: Event<HTMLInputElement>) {
+    //console.log('file[0]',e.target.files[0]);
+    if(e.target){
+    let file = e.target.files[0];
+
+    getBase64(file)
+      .then(result => {
+         setbase64Image(result as string)
+       })
+        .catch(err => {
+          console.log(err);
+        });
+    }else{
+      setbase64Image('')
+    }
+  };
 
   return (
     <Container>
@@ -200,7 +239,7 @@ export const NewAnnounce: FunctionComponent = () => {
                   <label>
                     Deseja adicionar alguma imagem para o seu anúncio ?
                   </label>
-                  <InputFile type="file" name="" id="" />
+                  <InputFile type="file" name="" id="" accept="image/*" onChange={handleFileInputChange}/>
                 </div>
               </AdImageWrapper>
               <AdTitleAndHistory>
@@ -237,7 +276,7 @@ export const NewAnnounce: FunctionComponent = () => {
               placeholder="Chave PIX do que receberá o dinheiro"
             />
           </div>
-          <LinkButton type="submit">{loading?<CircularProgress size={24} color={"inherit"} />:"Finalizar Cadastro"}</LinkButton>
+          <LinkButton disabled={loading} type="submit">{loading?<CircularProgress size={24} color={"inherit"} />:"Finalizar Cadastro"}</LinkButton>
         </DonationFormWrapper>
       </FormContainer>
     </Container>

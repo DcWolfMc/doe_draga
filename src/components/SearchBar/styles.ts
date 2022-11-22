@@ -65,5 +65,6 @@ background: ${props => props.theme["yellow-500"]};
 :hover{
     background: ${props => props.theme["yellow-300"]};
     color: ${props => props.theme["gray-100"]};
+    cursor: pointer;
 }
 `

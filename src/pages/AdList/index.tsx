@@ -23,7 +23,10 @@ export const AdList = () => {
       let dataResponse:Announce[] = []
       let dataAtual = new Date()
       response.data.forEach((ad:Announce)=>{
-        if( ad.data_termino && ad.status=="analise"){
+        if(ad.status == 'ativo'){
+          dataResponse.push(ad)
+        }
+        else if( ad.data_termino && ad.status=="analise"){
           let daysToPass = differenceInDays(parseISO(ad.data_termino),dataAtual)
           if(daysToPass <= 0){
             UpdatePostById(ad._id!,{...ad,status:"encerrado"});
