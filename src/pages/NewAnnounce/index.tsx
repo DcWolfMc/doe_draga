@@ -2,7 +2,6 @@ import React, {
   FunctionComponent,
   useState,
   ChangeEvent,
-  ChangeEventHandler,
   FormEvent,
 } from "react";
 import { CustomCheckbox } from "../../components/CustomCheckbox/CustomCheckbox";
@@ -10,8 +9,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { addDays , format} from "date-fns";
-import { useNavigate } from "react-router-dom"
+import { addDays, format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { Announce } from "../../@types/Announce";
 import {
@@ -34,12 +33,15 @@ import {
   TextArea,
 } from "./styles";
 
-import { createAnnounce, getAdList } from "../../services/api";
-import { CircularProgress } from "@mui/material";
-import { defaultTheme } from "../../styles/themes/default";
+import { createAnnounce, } from "../../services/api";
+import { Alert, CircularProgress, Snackbar } from "@mui/material";
 
+interface SnackbarType {
+  open: boolean;
+  type: "error" | "warning" | "info" | "success";
+}
 export const NewAnnounce: FunctionComponent = () => {
-  const navigation = useNavigate()
+  const navigation = useNavigate();
   const [nomeCriador, setNomeCriador] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [telefone, setTelefone] = useState<string>("");
@@ -51,9 +53,15 @@ export const NewAnnounce: FunctionComponent = () => {
   const [endDate, setEndDate] = useState<string>("");
   const [pixKey, setPixKey] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
-  const [base64Image, setbase64Image] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
-  let teste:Announce = {
+  const [base64Image, setbase64Image] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [snackbar, setSnackbar] = useState<SnackbarType>({
+    open: false,
+    type: "success",
+  });
+  const [snackMessage, setSnackMessage] = useState<string>("");
+
+  let teste: Announce = {
     id: "0",
     email: email,
     nome_criador: nomeCriador,
@@ -62,17 +70,35 @@ export const NewAnnounce: FunctionComponent = () => {
     texto: adContent,
     status: "analise",
     pixKey: pixKey,
-    data_liberacao: initialDate!=''?new Date(initialDate).toISOString() :new Date().toISOString(),
-    data_termino: endDate!=''?new Date(endDate).toISOString() :new Date().toISOString(),
+    data_liberacao:
+      initialDate != ""
+        ? new Date(initialDate).toISOString()
+        : new Date().toISOString(),
+    data_termino:
+      endDate != ""
+        ? new Date(endDate).toISOString()
+        : new Date().toISOString(),
     duracao: Number(duration),
-  }
+  };
 
   //console.log(teste);
-  
+  function handleClick(
+    message: string,
+    type: "error" | "warning" | "info" | "success"
+  ) {
+    setSnackMessage(message);
+    setSnackbar({ open: true, type: type });
+  }
+
+  function handleClose(){
+    setSnackbar((prev) => {
+      return { ...prev, open: false };
+    });
+  };
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     let announce: Announce = {
       id: uuidv4(),
       email: email,
@@ -82,29 +108,42 @@ export const NewAnnounce: FunctionComponent = () => {
       texto: adContent,
       status: "analise",
       pixKey: pixKey,
-    }; 
-    base64Image !=""? announce = {...announce, imagem: base64Image}: null
+    };
+    base64Image != ""
+      ? (announce = { ...announce, imagem: base64Image })
+      : null;
     isEndSpecific
-      ? (announce = { ...announce, data_termino: new Date(endDate).toISOString() })
+      ? (announce = {
+          ...announce,
+          data_termino: new Date(endDate).toISOString(),
+        })
       : (announce = { ...announce, duracao: Number(duration) });
     StartSpecificDate
-      ? (announce = { ...announce, data_liberacao: new Date(initialDate).toISOString() })
+      ? (announce = {
+          ...announce,
+          data_liberacao: new Date(initialDate).toISOString(),
+        })
       : (announce = announce);
-      console.log("announce:",announce);
-      createAnnounce(announce).then(res=>{
+    console.log("announce:", announce);
+    createAnnounce(announce)
+      .then((res) => {
+        handleClick("Anûncio criado com sucesso! \n Você será movido automaticamente!", "success");
         console.log(res);
-        navigation("/adList")
         
-      }).catch((res)=>{
-        setLoading(false)
+        
       })
+      .catch((res) => {
+        handleClick(
+          "algo deu errado na criação do anuncio. Verifique se esta tudo corretamente preenchido",
+          "error"
+        );
+        setLoading(false);
+      });
   }
-  function handleSelectImage(){
 
-  }
-  async function getBase64(file:File) {
-    return new Promise(resolve => {
-      
+
+  async function getBase64(file: File) {
+    return new Promise((resolve) => {
       // Make new FileReader
       let reader = new FileReader();
 
@@ -120,24 +159,24 @@ export const NewAnnounce: FunctionComponent = () => {
         resolve(baseURL);
       };
     });
-  };
+  }
 
   function handleFileInputChange(e: Event<HTMLInputElement>) {
     //console.log('file[0]',e.target.files[0]);
-    if(e.target){
-    let file = e.target.files[0];
+    if (e.target) {
+      let file = e.target.files[0];
 
-    getBase64(file)
-      .then(result => {
-         setbase64Image(result as string)
-       })
-        .catch(err => {
+      getBase64(file)
+        .then((result) => {
+          setbase64Image(result as string);
+        })
+        .catch((err) => {
           console.log(err);
         });
-    }else{
-      setbase64Image('')
+    } else {
+      setbase64Image("");
     }
-  };
+  }
 
   return (
     <Container>
@@ -152,21 +191,25 @@ export const NewAnnounce: FunctionComponent = () => {
                   type="text"
                   placeholder="Nome do Anunciante"
                   value={nomeCriador}
-                  onChange={(event)=>{setNomeCriador(event.target.value)}}
+                  onChange={(event) => {
+                    setNomeCriador(event.target.value);
+                  }}
                 />
                 <InputTypeTextFlex
                   required
                   type="email"
                   placeholder="E-mail de contato"
                   value={email}
-                  onChange={(event)=>{setEmail(event.target.value)}}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                  }}
                 />
                 <InputTypeTextFlex
                   required
                   type="text"
                   placeholder="Telefone com DDD"
                   value={telefone}
-                  onChange={(event)=>setTelefone(event.target.value)}
+                  onChange={(event) => setTelefone(event.target.value)}
                 />
                 <p>
                   Essas informações são importantes para que possamos validar a
@@ -193,11 +236,12 @@ export const NewAnnounce: FunctionComponent = () => {
                   />
                 </CheckBoxWrapper>
                 <InputTypeTextFlex
+                  required={StartSpecificDate}
                   disabled={!StartSpecificDate}
                   type={"date"}
-                  min={format(addDays(new Date(), 7),"yyyy-MM-dd")}
+                  min={format(addDays(new Date(), 7), "yyyy-MM-dd")}
                   value={initialDate}
-                  onChange={(event)=>setInitialDate(event.target.value)}
+                  onChange={(event) => setInitialDate(event.target.value)}
                 />
 
                 <div>
@@ -217,14 +261,20 @@ export const NewAnnounce: FunctionComponent = () => {
                     />
                   </CheckBoxWrapper>
                   {isEndSpecific ? (
-                    <InputTypeTextFlex required type={"date"} min={format(addDays(new Date(), 8),"yyyy-MM-dd")} value={endDate} onChange={(event)=>setEndDate(event.target.value)}/>
+                    <InputTypeTextFlex
+                      required={isEndSpecific}
+                      type={"date"}
+                      min={format(addDays(new Date(), 8), "yyyy-MM-dd")}
+                      value={endDate}
+                      onChange={(event) => setEndDate(event.target.value)}
+                    />
                   ) : (
                     <InputTypeTextFlex
                       type={"number"}
                       placeholder="tempo de duração do anúncio (DIAS)"
                       value={duration}
-                      required
-                      onChange={(event)=>setDuration(event.target.value)}
+                      required={!isEndSpecific}
+                      onChange={(event) => setDuration(event.target.value)}
                     />
                   )}
                 </div>
@@ -239,7 +289,13 @@ export const NewAnnounce: FunctionComponent = () => {
                   <label>
                     Deseja adicionar alguma imagem para o seu anúncio ?
                   </label>
-                  <InputFile type="file" name="" id="" accept="image/*" onChange={handleFileInputChange}/>
+                  <InputFile
+                    type="file"
+                    name=""
+                    id=""
+                    accept="image/*"
+                    onChange={handleFileInputChange}
+                  />
                 </div>
               </AdImageWrapper>
               <AdTitleAndHistory>
@@ -248,7 +304,7 @@ export const NewAnnounce: FunctionComponent = () => {
                   placeholder="Titulo do Anúncio"
                   required
                   value={adTitle}
-                  onChange={event=>setAdTitle(event.target.value)}
+                  onChange={(event) => setAdTitle(event.target.value)}
                 />
 
                 <TextArea
@@ -276,9 +332,27 @@ export const NewAnnounce: FunctionComponent = () => {
               placeholder="Chave PIX do que receberá o dinheiro"
             />
           </div>
-          <LinkButton disabled={loading} type="submit">{loading?<CircularProgress size={24} color={"inherit"} />:"Finalizar Cadastro"}</LinkButton>
+          <LinkButton disabled={loading} type="submit">
+            {loading ? (
+              <CircularProgress size={24} color={"inherit"} />
+            ) : (
+              "Finalizar Cadastro"
+            )}
+          </LinkButton>
         </DonationFormWrapper>
       </FormContainer>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={snackbar.type == "success"?
+        ()=>{handleClose();navigation("/adList"); }
+        :handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          {snackMessage}
+        </Alert>
+      </Snackbar>
+      
     </Container>
   );
 };
